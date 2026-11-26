@@ -213,13 +213,13 @@
     if (saved) {
       box.innerHTML = `<p class="good"><b>已保存：</b>${esc(saved.path)}</p><p>${esc(what)}</p>
         ${st.info.local ? '<button type="button" id="openOut">打开 output 文件夹</button>' : ''}
-        <p class="big-note">打印时选「实际大小 / 100%」，不要选「适合页面」。</p>`;
+        <p class="big-note">打印时选「实际大小（Actual Size）/ 100%」，不要选「适合页面（Fit）」。</p>`;
       const b = $('openOut');
       if (b) b.onclick = () => api('/api/open-output', { method: 'POST', retries: 0 }).catch(e => alert(e.message));
     } else {
       box.innerHTML = `<p class="good"><b>已下载：</b>${esc(file)}（在浏览器的「下载」文件夹）</p><p>${esc(what)}</p>
         ${why ? `<p class="muted">没有存进 output 文件夹：${esc(why)}</p>` : ''}
-        <p class="big-note">打印时选「实际大小 / 100%」，不要选「适合页面」。</p>`;
+        <p class="big-note">打印时选「实际大小（Actual Size）/ 100%」，不要选「适合页面（Fit）」。</p>`;
     }
   }
 
