@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A4 拼贴海报</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+<script src="js/theme.js"></script>
+</head>
+<body>
+<header class="top noprint">
+  <div>
+    <h1>A4 拼贴海报</h1>
+    <p class="sub">把一张大图片按实际尺寸切成很多张 A4，用一般打印机印出来，剪掉白边、粘起来就是大海报。</p>
+  </div>
+  <div class="tools">
+    <button type="button" id="consoleBtn" hidden>控制台</button>
+    <div class="theme" role="group" aria-label="主题">
+      <button type="button" data-theme-set="auto">自动</button>
+      <button type="button" data-theme-set="light">亮</button>
+      <button type="button" data-theme-set="dark">暗</button>
+    </div>
+  </div>
+</header>
+
+<dialog id="consoleDlg" class="console" aria-labelledby="consoleTitle">
+  <div class="console-head">
+    <h2 id="consoleTitle">控制台</h2>
+    <button type="button" id="consoleClose" aria-label="关闭">关闭</button>
+  </div>
+  <p class="muted">程序的运行情况（以前显示在黑色窗口里的内容）。出问题时，把 logs 文件夹发给维护的人。</p>
+  <pre id="consoleLines" class="console-lines" tabindex="0"></pre>
+  <div class="console-actions">
+    <button type="button" id="openLogs">打开 logs 文件夹</button>
+    <button type="button" id="openOutput">打开 output 文件夹</button>
+    <span class="spacer"></span>
+    <button type="button" id="quitApp" class="danger">结束程序</button>
+  </div>
+</dialog>
+
+<main class="grid">
+  <section class="card form">
+    <div class="step">
+      <h2><span class="num">1</span>选图片</h2>
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="image/jpeg,image/png,application/pdf,.jpg,.jpeg,.png,.pdf">
+        <span class="drop-main" id="dropMain">点这里选图片，或把文件拖进来</span>
+        <span class="drop-sub" id="dropSub">JPG、PNG 或 PDF（PDF 只用第 1 页）</span>
+      </label>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">2</span>成品尺寸 <small>拼好、剪好之后的大小</small></h2>
+      <div class="seg" role="group" aria-label="单位" id="unit">
+        <button type="button" data-v="in" class="on">英寸</button>
+        <button type="button" data-v="cm">厘米</button>
+      </div>
+      <div class="size">
+        <label>宽 <input type="number" id="w" min="1" step="any" value="51" inputmode="decimal"></label>
+        <span class="x">×</span>
+        <label>高 <input type="number" id="h" min="1" step="any" value="43" inputmode="decimal"></label>
+        <span class="u" id="unitLabel">英寸</span>
+      </div>
+      <label class="check"><input type="checkbox" id="lock" checked> 宽、高按图片比例锁在一起</label>
+      <div class="presets">
+        <span>常用尺寸：</span>
+        <button type="button" data-w="51" data-h="43">51 × 43 英寸</button>
+        <button type="button" data-w="24" data-h="43">24 × 43 英寸</button>
+        <button type="button" data-w="11" data-h="43">11 × 43 英寸</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">3</span>纸张和拼法</h2>
+      <div class="row">
+        <span class="lbl">纸张</span>
+        <div class="seg" role="group" aria-label="纸张" id="paper">
+          <button type="button" data-v="A4" class="on">A4</button>
+          <button type="button" data-v="A3">A3</button>
+          <button type="button" data-v="Letter">Letter</button>
+        </div>
+      </div>
+      <div class="row">
+        <span class="lbl">拼法</span>
+        <div class="seg" role="group" aria-label="拼法" id="mode">
+          <button type="button" data-v="overlap" class="on">重叠粘贴（建议）</button>
+          <button type="button" data-v="butt">对边拼</button>
+        </div>
+      </div>
+      <p class="hint" id="modeHint"></p>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">4</span>海报名称 <small>印在每张的编号旁边，也当文件名</small></h2>
+      <input type="text" id="name" class="wide" maxlength="40" placeholder="例：2026 颁奖典礼">
+    </div>
+
+    <div class="step go">
+      <button type="button" id="export" class="primary" disabled>导出 A4 拼贴 PDF</button>
+      <div class="prog" id="prog" aria-live="polite"></div>
+      <div class="done" id="done" hidden></div>
+    </div>
+  </section>
+
+  <section class="card result">
+    <div id="summary" class="summary"><p class="muted">先选一张图片。</p></div>
+    <div class="preview-wrap"><canvas id="preview" width="10" height="10" aria-label="拼贴示意图"></canvas></div>
+    <p class="legend muted" id="legend"></p>
+    <div id="warn"></div>
+  </section>
+
+  <section class="card howto">
+    <h2>打印和拼贴说明</h2>
+    <div class="howto-grid">
+      <ol class="big">
+        <li><b>打印时选「实际大小」或「100%」。</b><br>不要选「适合页面」「缩小过大的页面」，也不要选 Acrobat 的「海报」。</li>
+        <li><b>纸张选 <span data-paper-label>A4</span>，方向选「自动」。</b></li>
+        <li id="howMeasure"><b>先印第 1 张量一量：</b><span id="measure">—</span>。差超过 1 mm 就是打印比例没选对。</li>
+        <li id="howCut"><b>沿短黑线剪掉白边。</b>每张上方都印着要剪哪几边。</li>
+        <li id="howPaste"></li>
+      </ol>
+      <figure class="fig" id="fig" aria-label="怎么剪、怎么贴"></figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">A4 拼贴海报 · <span id="ver">v—</span></footer>
+
+<script src="js/core.js"></script>
+<script src="js/tiler.js"></script>
+<script src="js/source.js"></script>
+<script src="js/render.js"></script>
+<script src="js/console.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

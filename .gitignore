@@ -1,0 +1,47 @@
+# ---------- 个人资料（绝对不要上传） ----------
+Result/
+data/
+output/
+logs/
+cache/
+config/secrets.ini
+
+# ---------- 打包产物 ----------
+*.exe
+# 打包时 exe 还开着，Go 会把旧 exe 改名成 .exe~ 留下来
+*.exe~
+.buildenv/
+.buildwork/
+build/work/
+dist/
+*.spec
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# ---------- Node ----------
+node_modules/
+
+# ---------- Office / 系统暂存文件 ----------
+~$*
+*.tmp
+*.log
+*.bak
+.~lock.*#
+Thumbs.db
+desktop.ini
+Desktop.ini
+.DS_Store
+
+# ---------- 编辑器 ----------
+.vscode/
+.idea/
+*.swp
+
+# ---------- 其它 ----------
+Claude outputs/
