@@ -31,6 +31,7 @@ web/js/app.js                 页面
 web/js/console.js             「控制台」面板、心跳
 tests/tiler.test.js           ★ 规则测试（检查数字表）
 cmd/winres/ + internal/winres/  F12 exe 图标、版本信息、manifest（标准库产生 .syso，不用 windres）
+cmd/portable/ + internal/portable/  F12 便携版 dist/A4-Poster-Tiler_Portable.zip（exe + config/config.ini + 空的 logs/）
 build/windows/app.ico         exe 图标；换成自己的 .ico 再打包即可（go run ./cmd/winres -make-icon 重画默认图标）
 tests/structure_test.go       结构测试
 ```
@@ -73,6 +74,8 @@ tests/structure_test.go       结构测试
   - 结束：只开本机时，网页每 15 秒心跳 `/__ping`，关窗送 `/api/bye`，20 秒内没有新心跳就结束；3 分钟没心跳也结束。
     access = lan 时不会自动结束，要在「控制台」按「结束程序」。
   - `go run` 时仍有命令窗口，内容照样印出来。
+- 便携版压缩包和里面的文件夹叫 `A4-Poster-Tiler_Portable`（维护者定 2026-11-26）；exe 本身照全局规范仍叫 `A4-Poster-Tiler.exe`。
+  GitHub Release 附这个 zip。
 - 网页页脚只写 `A4 拼贴海报 · v版本号`，不写「© 年份 循人中学」（维护者定 2026-11-26）。
 - 浏览器端用 ES module：只有 pdf.js（`import('/vendor/pdfjs/pdf.min.mjs')`，选 PDF 时才载入）；自己的代码仍是普通脚本。服务端对 `.mjs` 回 `text/javascript`。
 

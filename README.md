@@ -4,7 +4,7 @@
 
 ## 怎么用
 
-1. 双击 `A4-Poster-Tiler.exe`，会打开一个独立窗口（用电脑上的 Edge 或 Chrome，没有网址栏）。**关掉这个窗口 = 结束程序**（约 20 秒后）。
+1. 解压 `A4-Poster-Tiler_Portable.zip`（里面有 exe、`config`、`logs`），双击 `A4-Poster-Tiler.exe`，会打开一个独立窗口（用电脑上的 Edge 或 Chrome，没有网址栏）。**关掉这个窗口 = 结束程序**（约 20 秒后）。
    想看程序的运行情况、打开 logs 文件夹或马上结束程序：按右上角「控制台」。
 2. 选一张大图片：JPG、PNG，或 PDF（只用第 1 页）。
 3. 填**成品尺寸**（拼好、剪好之后的大小），单位可选英寸 / 厘米。宽、高默认按图片比例锁在一起；也可以按常用尺寸 51 × 43、24 × 43、11 × 43 英寸。
@@ -46,4 +46,7 @@ logs\     日志（出问题时把这个文件夹发给维护的人；「控制�
 
 ## 给维护者：打包
 
-双击 `build.bat`（需要 Go 和 Node；老师的电脑不需要）。会先跑全部测试，通过才产生 `A4-Poster-Tiler.exe`。
+双击 `build.bat`（需要 Go 和 Node；老师的电脑不需要）。会先跑全部测试，通过才产生：
+
+- `A4-Poster-Tiler.exe`（项目根目录，双击就能试）
+- `dist\A4-Poster-Tiler_Portable.zip`（便携版，发给老师用这个；也附在 GitHub Release）

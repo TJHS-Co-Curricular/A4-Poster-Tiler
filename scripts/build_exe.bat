@@ -12,6 +12,7 @@ pushd "%~dp0.."
 set "ROOT=%CD%"
 set "MODULE=github.com/TJHS-Co-Curricular/A4-Poster-Tiler"
 set "EXE_NAME=A4-Poster-Tiler.exe"
+set "APP_ZIP=A4-Poster-Tiler_Portable.zip"
 set "NOPAUSE="
 if /i "%~1"=="--no-pause" set "NOPAUSE=1"
 
@@ -75,11 +76,16 @@ set "CGO_ENABLED=0"
 go build -trimpath -ldflags "-H windowsgui -s -w -X %MODULE%/internal/buildinfo.Version=%VER% -X %MODULE%/internal/buildinfo.Commit=%COMMIT% -X %MODULE%/internal/buildinfo.BuildDate=%BDATE%" -o "%ROOT%\%EXE_NAME%" ./cmd/a4-poster-tiler
 if errorlevel 1 goto :fail
 
+echo       Making portable zip (exe + config + logs) ...
+go run ./cmd/portable
+if errorlevel 1 goto :fail
+
 for %%f in ("%ROOT%\%EXE_NAME%") do set "SIZE=%%~zf"
 set /a SIZE_MB=%SIZE% / 1048576
 echo.
 echo [OK] %ROOT%\%EXE_NAME%  (v%VER%, about %SIZE_MB% MB)
-echo      To deploy: copy %EXE_NAME% to the teacher's computer and double-click it.
+echo [OK] %ROOT%\dist\%APP_ZIP%
+echo      To deploy: give the teacher the zip; unzip it and double-click %EXE_NAME%.
 popd
 if not defined NOPAUSE pause
 exit /b 0
