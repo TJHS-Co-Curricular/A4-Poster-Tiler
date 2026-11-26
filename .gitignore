@@ -10,6 +10,8 @@ config/secrets.ini
 *.exe
 # 打包时 exe 还开着，Go 会把旧 exe 改名成 .exe~ 留下来
 *.exe~
+# exe 的图标和版本资源，打包时由 cmd/winres 依 VERSION 产生
+*.syso
 .buildenv/
 .buildwork/
 build/work/

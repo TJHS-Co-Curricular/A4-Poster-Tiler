@@ -30,6 +30,8 @@ web/js/source.js              F5 读图片 / PDF
 web/js/app.js                 页面
 web/js/console.js             「控制台」面板、心跳
 tests/tiler.test.js           ★ 规则测试（检查数字表）
+cmd/winres/ + internal/winres/  F12 exe 图标、版本信息、manifest（标准库产生 .syso，不用 windres）
+build/windows/app.ico         exe 图标；换成自己的 .ico 再打包即可（go run ./cmd/winres -make-icon 重画默认图标）
 tests/structure_test.go       结构测试
 ```
 
@@ -73,7 +75,6 @@ tests/structure_test.go       结构测试
   - `go run` 时仍有命令窗口，内容照样印出来。
 - 网页页脚只写 `A4 拼贴海报 · v版本号`，不写「© 年份 循人中学」（维护者定 2026-11-26）。
 - 浏览器端用 ES module：只有 pdf.js（`import('/vendor/pdfjs/pdf.min.mjs')`，选 PDF 时才载入）；自己的代码仍是普通脚本。服务端对 `.mjs` 回 `text/javascript`。
-- exe「属性」里还没有版本信息（Go 需要另外的资源工具）；版本号显示在「控制台」的横幅、网页页脚、日志第一行（go run 时也在命令窗口标题）。
 
 ## 7. 绝对不能改
 

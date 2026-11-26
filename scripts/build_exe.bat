@@ -66,6 +66,9 @@ echo [5/5] Compiling ...
 set "COMMIT="
 where git >nul 2>nul && for /f %%c in ('git -C "%ROOT%" rev-parse --short HEAD 2^>nul') do set "COMMIT=%%c"
 for /f %%d in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"') do set "BDATE=%%d"
+echo       Making exe icon and version info ...
+go run ./cmd/winres
+if errorlevel 1 goto :fail
 set "GOOS=windows"
 set "GOARCH=amd64"
 set "CGO_ENABLED=0"
